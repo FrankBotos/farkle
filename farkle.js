@@ -65,7 +65,7 @@ function App() {
       setPot(betAmount*2)
       setBetMessage('');
     } else {
-      setBetMessage('Please enter a valid dollar amount!');
+      setBetMessage('Please enter a valid dollar amount, and make sure you and your opponent have enough for the bet!');
     }
 
   }
@@ -73,9 +73,9 @@ function App() {
   return (
     <div style={styles.main}>
       <h1 style={styles.title}>Farkle!</h1>
-      <h2 style={styles.heading}>Your Bank: {bank} </h2>
-      <h2 style={styles.heading}>Opponent Bank: {opponentBank}</h2>
-      <h2 style={styles.heading}>Pot: {pot}</h2>
+      <h2 style={styles.heading}>Your Bank: ${bank.toFixed(2)} </h2>
+      <h2 style={styles.heading}>Opponent Bank: ${opponentBank.toFixed(2)}</h2>
+      <h2 style={styles.heading}>Pot: ${pot.toFixed(2)}</h2>
 
       <div>
         
