@@ -14,6 +14,11 @@ function App() {
 
   const [gameActive, setGameActive] = useState(false);
 
+  const [gameState, setGameState] = useState('');
+
+  const [firstRollTextOpacity, setFirstRollTextOpacity] = useState(1.0);
+
+
   const [diceSetOne, setDiceSetOne] = useState([
     {id: 0, value: 0},
     {id: 1, value: 0},
@@ -31,6 +36,15 @@ function App() {
     {id: 4, value: 0},
     {id: 5, value: 0},
   ])
+
+  function ListDiceSetOne() {
+    return diceSetOne.map(dice =>
+      <div>{dice.value}</div>
+    ); 
+  }
+
+
+  
   
   const styles = {
     main: {
@@ -49,7 +63,11 @@ function App() {
       margin: '10px',
     },
     errorMessage: {
-      color: 'red'
+      color: 'red',
+    },
+    fadeOutText: {
+      opacity: firstRollTextOpacity,
+      transition: 'opacity 0.9s ease-out',
     },
   };
 
@@ -64,8 +82,42 @@ function App() {
       setOpponentBank(opponentBank - betAmount);
       setPot(betAmount*2)
       setBetMessage('');
+
+      playGame();
+
     } else {
       setBetMessage('Please enter a valid dollar amount, and make sure you and your opponent have enough for the bet!');
+    }
+
+  }
+
+  const playGame = async () => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));//setting up wait functionality
+
+    setFirstRollTextOpacity(1.0);//reset opacity
+    
+
+    var whoRollsFirst = Math.floor(Math.random() * 2);
+    if (whoRollsFirst == 0) {
+      setGameState('playerOneRollsFirst');
+      await delay(50);//short delay so opacity setting can mount
+      
+      setFirstRollTextOpacity(0);
+      await delay(1000);
+
+      setGameState('playerOneRolling');
+      
+
+    } else {
+      setGameState('playerTwoRollsFirst');
+      await delay(50);//short delay so opacity setting can mount
+      
+      setFirstRollTextOpacity(0);
+      await delay(1000);
+
+      setGameState('playerTwoRolling');
+      
+
     }
 
   }
@@ -96,6 +148,35 @@ function App() {
           <button disabled={betPlaced} style={styles.buttonStyle} onClick={() => betOnGame(betAmount)}> Place Bet</button>
           <div style={styles.errorMessage}>{betMessage}</div>
           
+        
+        </div>
+
+      }
+
+      {
+        gameState == 'playerOneRollsFirst' && <p style={styles.fadeOutText}>
+          Player one rolls first!
+        </p>
+      }
+
+      {
+        gameState == 'playerTwoRollsFirst' && <p style={styles.fadeOutText}>
+          Player two rolls first!
+        </p>
+      }
+
+      {
+        gameState == 'playerOneRolling' && <div>
+        Player One Now Rolling!!!
+
+        {ListDiceSetOne()}
+
+        </div>
+      }
+
+      {
+        gameState == 'playerTwoRolling' && <div>
+        Player Two Now Rolling!
         
         </div>
       }
