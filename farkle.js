@@ -26,7 +26,7 @@ function App() {
     {id: 3, value: 0},
     {id: 4, value: 0},
     {id: 5, value: 0},
-  ])
+  ]);
 
   const [diceSetTwo, setDiceSetTwo] = useState([
     {id: 0, value: 0},
@@ -35,11 +35,22 @@ function App() {
     {id: 3, value: 0},
     {id: 4, value: 0},
     {id: 5, value: 0},
-  ])
+  ]);
+
+  const DICE_FACES = {
+  1: '⚀',
+  2: '⚁',
+  3: '⚂',
+  4: '⚃',
+  5: '⚄',
+  6: '⚅',
+};
 
   function ListDiceSetOne() {
     return diceSetOne.map(dice =>
-      <div>{dice.value}</div>
+
+      <div style= {styles.dice} key={dice.id}>{DICE_FACES[dice.value]}</div>   
+
     ); 
   }
 
@@ -68,6 +79,9 @@ function App() {
     fadeOutText: {
       opacity: firstRollTextOpacity,
       transition: 'opacity 0.9s ease-out',
+    },
+    dice: {
+      fontSize: '2rem',
     },
   };
 
@@ -106,6 +120,13 @@ function App() {
       await delay(1000);
 
       setGameState('playerOneRolling');
+      const rolled = [...diceSetOne];
+      for (let i = 0; i<rolled.length; i++){
+        const val = Math.floor(Math.random() * 6) + 1;
+        rolled[i].value = val;
+      }
+
+      setDiceSetOne(rolled);
       
 
     } else {
@@ -169,7 +190,7 @@ function App() {
         gameState == 'playerOneRolling' && <div>
         Player One Now Rolling!!!
 
-        {ListDiceSetOne()}
+        <div>{ListDiceSetOne()}</div>
 
         </div>
       }
